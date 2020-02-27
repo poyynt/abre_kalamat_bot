@@ -27,15 +27,19 @@ def ok(t):
 	return True
 
 def clean(d):
-	d.replace("\u200c"," ")
-	if "twitter" in d : return ""
-	if ".com" in d : return ""
-	if "http" in d : return ""
-	if len(d) <3 : return ""
+    d.replace("\u200c","")
+    if "t.co" in d : return ""
+    if len(d) <3: return ""
+
+    if " می" in d  or "شه" in d  : return ""
+    if "بیش" in d  : return ""
+    if "می" in d : return ""
+    if d == "ست" : return ""
+    if "خیلی" in d : return ""
+    if "ولی" in d : return ""
 
 
-	#d.replace("")
-	return d
+    return d
 
 def get_stopwords():
 	with open("assets/stop_words/additional_stops.txt") as f:
