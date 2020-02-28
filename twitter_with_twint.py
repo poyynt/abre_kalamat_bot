@@ -7,7 +7,11 @@ from PIL import Image
 
 import os
 
-import arabic_reshaper
+STOPWORDS_LIST = [
+	"assets/stop_words/additional_stops.txt",
+	"assets/stop_words/origianl_stop_words.txt",
+	"assets/stop_words/stopwords_me.txt",
+]
 
 def fetch_tweet(idish):
 	f = open("out/tweets.json","w")
@@ -41,13 +45,12 @@ def clean(d):
 
     return d
 
-def get_stopwords():
-	with open("assets/stop_words/additional_stops.txt") as f:
-		words = [i.strip() for i in f.readlines()]
-	with open("assets/stop_words/stopwords_me.txt") as f:
-		words += [i.strip() for i in f.readlines()]
+def load_stopwords():
+	words = []
+	for file in STOPWORDS_LIST:
+		with open(file) as f:
+			words += f.read().split()
 	return words
-
 
 def make(idish, mask = "twitter"):
 	fetch_tweet(idish)
@@ -85,10 +88,9 @@ def make(idish, mask = "twitter"):
 			mask = mask_array,
 			include_numbers=False,
 			persian_normalize=True,
+			stopwords=load_stopwords()
 		)
 		
-		wc.add_stop_words(get_stopwords())
-
 		word_cloud = wc.generate(text)
 
 		image = word_cloud.to_image()
