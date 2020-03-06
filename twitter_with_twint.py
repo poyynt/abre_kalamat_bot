@@ -7,6 +7,8 @@ from PIL import Image
 
 import os
 
+TOR = True #set to false if you don't want to use tor
+
 STOPWORDS_LIST = [
 	"assets/stop_words/additional_stops.txt",
 	"assets/stop_words/origianl_stop_words.txt",
@@ -18,7 +20,11 @@ def fetch_tweet(idish):
 	f.write("")
 	f.close()
 
-	os.popen(f"twint -u {idish} -o out/tweets.json --stats --json --filter-retweets --limit 16384").read()
+	prefix = ""
+	if TOR:
+		prefix = "torsocks "
+
+	os.popen(f"{prefix}twint -u {idish} -o out/tweets.json --stats --json --filter-retweets --limit 16384").read()
 
 
 def ok(t):
